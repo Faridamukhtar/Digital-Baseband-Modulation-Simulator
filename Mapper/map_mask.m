@@ -29,8 +29,8 @@ function [symbols, M, k, gray, mapped_values] = map_mask(bits, M)
     % Generate full Gray-coded decimal values (0 to M-1)
     full_gray = bitxor((0:M-1)', bitshift((0:M-1)', -1));
     
-    % Apply mapping: level = 2*gray - (2*M - 1)
-    mapped_values = 2*full_gray - (2*M - 1);
+    % Apply mapping: level = 2*gray - (M - 1)
+    mapped_values = 2*full_gray - (M - 1);
     
     % Map input bits to corresponding ASK symbols
     symbols = mapped_values(gray + 1); % +1 because MATLAB indexing starts at 1
