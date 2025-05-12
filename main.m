@@ -8,7 +8,7 @@ clear; clc;
 
 % ---- Config ----
 EbNodB = -2:1:10;
-N = 4;
+N = 10e5;
 modulation = 'mpsk';  % Options: 'bfsk', 'mpsk', 'both'
 M = 4; % For M-PSK (e.g., QPSK)
 

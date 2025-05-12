@@ -5,7 +5,7 @@ function ber_bfsk = run_bfsk_simulation(EbNodB, N)
         bits = generate_bits(N);
         symbols = map_bfsk(bits);
         r = awgn_channel(symbols, EbNodB(i), 1);
-        bits_hat = demap_bfsk(real(r));
+        bits_hat = demap_bfsk(r);
         ber_bfsk(i) = calculate_ber(bits, bits_hat);
     end
 end
