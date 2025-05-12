@@ -9,7 +9,7 @@ clear; clc; clear all;
 % ---- Config ----
 EbNodB = -2:1:10;
 N = 1e5;
-modulation = 'both';  % Options: 'bfsk', 'mpsk', 'both'
+modulation = 'all';  % Options: 'bfsk', 'mpsk', 'all'
 M = 4; % For M-PSK (e.g., QPSK)
 % ---- Simulation ----
 switch lower(modulation)
@@ -21,7 +21,7 @@ switch lower(modulation)
         ber_mpsk = run_mpsk_simulation(EbNodB, N, M);
         hFig = plot_ber(EbNodB, {ber_mpsk}, {sprintf('M-PSK (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MPSK)');
 
-    case 'both'
+    case 'all'
         ber_bfsk = run_bfsk_simulation(EbNodB, N);
         ber_mpsk = run_mpsk_simulation(EbNodB, N, M);
         hFig = plot_ber(EbNodB, {ber_bfsk, ber_mpsk}, ...
