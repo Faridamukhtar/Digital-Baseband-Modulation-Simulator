@@ -4,42 +4,35 @@ projectRoot = fileparts(thisFile);
 addpath(genpath(projectRoot));
 
 % clear
-clear; clc;
+clear; clc; clear all;
 
 % ---- Config ----
 EbNodB = -2:1:10;
-N = 10e5;
+N = 1e5;
 modulation = 'both';  % Options: 'bfsk', 'mpsk', 'both'
 M = 4; % For M-PSK (e.g., QPSK)
-
 % ---- Simulation ----
 switch lower(modulation)
     case 'bfsk'
         ber_bfsk = run_bfsk_simulation(EbNodB, N);
-        figure("Name", "BER vs Eb/No (dB)");
-        semilogy(EbNodB, ber_bfsk, 'b-o', 'LineWidth', 1.5);
-        legend('Coherent BFSK');
+        hFig = plot_ber(EbNodB, {ber_bfsk}, {'Coherent BFSK'}, {'b-o'}, 1.5, 'BER vs Eb/No (BFSK)');
 
     case 'mpsk'
         ber_mpsk = run_mpsk_simulation(EbNodB, N, M);
-        figure("Name", "BER vs Eb/No (dB)");
-        semilogy(EbNodB, ber_mpsk, 'r-s', 'LineWidth', 1.5);
-        legend(sprintf('M-PSK (M = %d)', M));
+        hFig = plot_ber(EbNodB, {ber_mpsk}, {sprintf('M-PSK (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MPSK)');
 
     case 'both'
         ber_bfsk = run_bfsk_simulation(EbNodB, N);
         ber_mpsk = run_mpsk_simulation(EbNodB, N, M);
-        figure("Name", "BER vs Eb/No (dB)");
-        semilogy(EbNodB, ber_bfsk, 'b-o', EbNodB, ber_mpsk, 'r-s', 'LineWidth', 1.5);
-        legend('Coherent BFSK', sprintf('M-PSK (M = %d)', M));
+        hFig = plot_ber(EbNodB, {ber_bfsk, ber_mpsk}, ...
+                        {'Coherent BFSK', sprintf('M-PSK (M = %d)', M)}, ...
+                        {'b-o', 'r-s'}, 1.5, 'BER Performance Comparison');
 
     otherwise
         error('Invalid modulation type selected.');
 end
 
-
-% ---- BER Plot Formatting ----
-grid on;
-xlabel('Eb/No (dB)');
-ylabel('Bit Error Rate');
-title('BER Performance Comparison');
+% show the BER Plot
+if ~isempty(hFig)
+    set(hFig, 'Visible', 'on');
+end

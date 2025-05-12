@@ -20,12 +20,11 @@ function ber_bfsk = run_bfsk_simulation(EbNodB, N)
     end
 
     % Plot constellation at selected Eb/No
-    if ~isempty(selected_received)
-        figure("Name", "BPSK Constellation");
-        scatter(real(selected_received), imag(selected_received), 10, 'filled');
-        axis equal; grid on;
-        title(selected_title);
-        xlabel('In-phase (I)');
-        ylabel('Quadrature (Q)');
+    hFig = plot_constellation(selected_received, selected_title);
+    
+    % display the figure
+    if ~isempty(hFig)
+        set(hFig, 'Visible', 'on');
     end
+
 end
