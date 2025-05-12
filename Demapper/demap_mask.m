@@ -14,7 +14,7 @@ function bits_hat = demap_mask(received, M)
     gray_indices = bitxor(binary_indices, bitshift(binary_indices, -1));
 
     % Generate full ASK constellation (same as mapping side)
-    mapped_values = 2 * gray_indices - (2*M - 1);
+    mapped_values = 2 * gray_indices - (M - 1);
 
     % Build Gray to binary lookup table
     binary_lookup = zeros(1, M);
