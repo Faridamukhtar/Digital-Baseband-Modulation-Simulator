@@ -1,12 +1,6 @@
 function symbols = map_qam(bits, M)
-% MAP_QAM - Maps a bitstream to QAM symbols using Gray-coded ASK mapping
-% Inputs:
-%   bits - Row vector of bits (e.g., [0 1 1 0 ...])
-%   M    - Modulation order (e.g., 8, 16, 64)
-% Output:
-%   symbols - Complex QAM symbols mapped from the input bits
-
-    k = log2(M);  % Total bits per QAM symbol
+    k = log2(M);  % Bits per symbol
+    %fprintf('Total bits per symbol (k): %d\n', k);
 
     if mod(k, 2) == 0
         Mx = sqrt(M);
@@ -21,31 +15,42 @@ function symbols = map_qam(bits, M)
 
     kx = log2(Mx);
     ky = log2(My);
+    %fprintf('kx (I): %d, ky (Q): %d\n', kx, ky);
 
-    % Ensure length(bits) is a multiple of k
+    % Trim bits
     bits = bits(1:floor(length(bits)/k)*k);
+    %fprintf('Trimmed input bits:\n'); disp(bits);
 
-    % Reshape into k-bit groups
+    % Group into k-bit segments
     bit_groups = reshape(bits, k, [])';
+    %fprintf('Grouped bits:\n'); disp(bit_groups);
 
-    % Separate into I (kx) and Q (ky) parts
     I_bits = bit_groups(:, 1:kx);
     Q_bits = bit_groups(:, kx+1:end);
+    %fprintf('I bits:\n'); disp(I_bits);
+    %fprintf('Q bits:\n'); disp(Q_bits);
 
-    % Convert to decimal
-    I_dec = bi2de(I_bits,'left-msb');
-    Q_dec = bi2de(Q_bits,'left-msb');
+    I_dec = bi2de_local(I_bits);
+    Q_dec = bi2de_local(Q_bits);
+    %fprintf('I decimal:\n'); disp(I_dec);
+    %fprintf('Q decimal:\n'); disp(Q_dec);
 
-    % Convert to Gray code
     I_gray = bitxor(I_dec, bitshift(I_dec, -1));
     Q_gray = bitxor(Q_dec, bitshift(Q_dec, -1));
+    %fprintf('I Gray:\n'); disp(I_gray);
+    %fprintf('Q Gray:\n'); disp(Q_gray);
 
-    % Map to ASK levels: 2*gray - (2M - 1)
     I_levels = 2 * I_gray - (Mx - 1);
     Q_levels = 2 * Q_gray - (My - 1);
+    %fprintf('I levels:\n'); disp(I_levels);
+    %fprintf('Q levels:\n'); disp(Q_levels);
 
-    % Combine into complex QAM symbol
     symbols = I_levels + 1j * Q_levels;
+    %fprintf('Mapped QAM symbols:\n'); disp(symbols);
 end
 
-
+function d = bi2de_local(B)
+% BI2DE_LOCAL - Converts binary matrix (left-msb) to decimal vector
+    k = size(B, 2);
+    d = sum(B .* 2.^(k-1:-1:0), 2);
+end
