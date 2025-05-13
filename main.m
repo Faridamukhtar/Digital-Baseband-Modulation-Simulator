@@ -26,6 +26,12 @@ switch lower(modulation)
     case 'mpsk'
         ber_mpsk = run_mpsk_simulation(EbNodB, N, M);
         hFig = plot_ber(EbNodB, {ber_mpsk}, {sprintf('M-PSK (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MPSK)');
+    case 'mask'
+        ber_mask = run_mask_simulation(EbNodB,N,M);
+        hFig = plot_ber(EbNodB, {ber_mask}, {sprintf('M-ASK (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MASK)');
+    case 'mqam'
+        ber_mask = run_qam_simulation(EbNodB,N,M);
+        hFig = plot_ber(EbNodB, {ber_mask}, {sprintf('M-QAM (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MQAM)');
  
     case 'all'
         ber_bfsk = run_bfsk_simulation(EbNodB, N);
