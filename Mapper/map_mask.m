@@ -1,41 +1,25 @@
-function [symbols, M, k, gray, mapped_values] = map_mask(bits, M)
-% Map bits to M-ASK Gray-coded amplitude levels
-% Inputs:
-%   bits - Row vector of binary bits
-%   M    - Modulation order (e.g., 8 for 8-ASK)
-% Outputs:
-%   symbols       - Column vector of M-ASK mapped values (amplitudes)
-%   M             - Modulation order
-%   k             - Bits per symbol
-%   gray          - Gray-coded decimal indices
-%   mapped_values - Full vector of Gray-coded ASK levels (for reference)
-
-    % Calculate bits per symbol
+function [symbols, M, k, gray, ask_levels] = map_mask(bits, M)
     k = log2(M);
-    
-    % Trim bits to be a multiple of k
+    %fprintf('Bits per symbol (k): %d\n', k);
+
     bits = bits(1:floor(length(bits)/k)*k);
-    
-    % Group bits into k-bit chunks
+    %fprintf('Trimmed bits:\n'); disp(bits);
+
     bit_groups = reshape(bits, k, [])';
-    
-    % Convert binary to decimal
-    indices = de2bi(bit_groups,'left-msb');
+    %fprintf('Grouped bits:\n'); disp(bit_groups);
 
-    
-    % Convert binary to Gray code
+    powers = 2.^(k-1:-1:0);
+    indices = bit_groups * powers';
+    %fprintf('Decimal indices:\n'); disp(indices);
+
     gray = bitxor(indices, bitshift(indices, -1));
-    
-    % Generate full Gray-coded decimal values (0 to M-1)
-    full_gray = bitxor((0:M-1)', bitshift((0:M-1)', -1));
-    
-    % Apply mapping: level = 2*gray - (M - 1)
-    mapped_values = 2*full_gray - (M - 1);
-    
-    % Map input bits to corresponding ASK symbols
-    symbols = mapped_values(gray + 1); % +1 because MATLAB indexing starts at 1
+    %fprintf('Gray codes:\n'); disp(gray);
 
-    % Output as column vector
-    symbols = symbols(:);
+    ask_levels = linspace(-(M-1), M-1, M);  %  for M=8: [-7 -5 -3 -1 1 3 5 7]
+    %fprintf('ASK Levels:\n'); disp(ask_levels);
+
+    symbols = ask_levels(gray + 1);  
+    %fprintf('Mapped symbols:\n'); disp(symbols);
+
+    symbols = symbols(:);  % Column vector
 end
-
