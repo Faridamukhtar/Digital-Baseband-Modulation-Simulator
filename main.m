@@ -29,10 +29,11 @@ switch lower(modulation)
     case 'mask'
         ber_mask = run_mask_simulation(EbNodB,N,M);
         %hFig = plot_ber(EbNodB, {ber_mask}, {sprintf('M-ASK (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MASK)');
-        hFig = plot_ber_with_theory(EbNodB, {ber_mask}, {sprintf('M-ASK (M = %d)',M)}, 'mask', 2, {'b-o'}, 1.5, 'BER vs Eb/No (M-ASK)');
+        hFig = plot_ber_with_theory(EbNodB, {ber_mask}, {sprintf('M-ASK (M = %d)',M)}, 'mask', M, {'b-o'}, 1.5, 'BER vs Eb/No (M-ASK)');
     case 'mqam'
         ber_mqam = run_qam_simulation(EbNodB,N,M);
-        hFig = plot_ber(EbNodB, {ber_mqam}, {sprintf('M-QAM (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MQAM)');
+        %hFig = plot_ber(EbNodB, {ber_mqam}, {sprintf('M-QAM (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MQAM)');
+        hFig = plot_ber_with_theory(EbNodB, {ber_mqam}, {sprintf('M-QAM (M = %d)',M)}, 'mqam', M, {'b-o'}, 1.5, 'BER vs Eb/No (M-QAM)');
  
     case 'all'
         ber_bfsk = run_bfsk_simulation(EbNodB, N);
