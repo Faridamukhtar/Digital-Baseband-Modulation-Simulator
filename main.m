@@ -46,7 +46,12 @@ switch lower(modulation)
         ber_mqam = run_qam_simulation(EbNodB,N,M);
         %hFig = plot_ber(EbNodB, {ber_mqam}, {sprintf('M-QAM (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MQAM)');
         hFig = plot_ber_with_theory(EbNodB, {ber_mqam}, {sprintf('M-QAM (M = %d)',M)}, 'mqam', M, {'b-o'}, 1.5, 'BER vs Eb/No (M-QAM)');
- 
+  
+    case 'msk'
+        ber_msk = run_msk_simulation(EbNodB, N);
+        hFig= plot_ber_with_theory(EbNodB, {ber_msk},  {'MSK'}, 'msk', 2, {'g-d'}, 1.5, 'BER vs Eb/No (MSK)');
+        %MSK isn't M-ary, it is binary only, we use M=2 for function consistency
+
     case 'all'
         ber_bfsk = run_bfsk_simulation(EbNodB, N);
         ber_mpsk = run_mpsk_simulation(EbNodB, N, M);

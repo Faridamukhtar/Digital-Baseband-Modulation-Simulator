@@ -18,6 +18,8 @@ function ber = get_theoretical_ber(EbNoVec, modType, M)
             ber = (1/k) * erfc(sqrt(EbNo));
        case {'bfsk'}
             ber = 0.5 * erfc(sqrt(EbNo));
+       case {'msk'}
+            ber = 0.5 * erfc(sqrt(EbNo));
        otherwise
             ber = 0;
             % error('Unsupported modulation type: %s', modType);
