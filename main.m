@@ -9,7 +9,7 @@ clear; clc; clear all;
 % ---- Config ----
 EbNodB = -2:1:10;
 N = 1e5;
-modulation = 'dbpsk';  % Options: 'bfsk', 'dbpsk', 'mpsk', 'all'
+modulation = 'mpsk';  % Options: 'bfsk', 'dbpsk', 'mpsk', 'all'
 M = 4; % For M-PSK (e.g., QPSK)
 % ---- Simulation ----
 switch lower(modulation)
@@ -20,12 +20,24 @@ switch lower(modulation)
 
     case 'bfsk'
         ber_bfsk = run_bfsk_simulation(EbNodB, N);
-        hFig = plot_ber(EbNodB, {ber_bfsk}, {'Coherent BFSK'}, {'b-o'}, 1.5, 'BER vs Eb/No (BFSK)');
-        % hFig = plot_ber_with_theory(EbNodB, {ber_bfsk}, {'Coherent BFSK'}, 'bfsk', 2, {'b-o'}, 1.5, 'BER vs Eb/No (BFSK)');
+        % hFig = plot_ber(EbNodB, {ber_bfsk}, {'Coherent BFSK'}, {'b-o'}, 1.5, 'BER vs Eb/No (BFSK)');
+        hFig = plot_ber_with_theory(EbNodB, {ber_bfsk}, {'Coherent BFSK'}, 'bfsk', 2, {'b-o'}, 1.5, 'BER vs Eb/No (BFSK)');
 
     case 'mpsk'
-        ber_mpsk = run_mpsk_simulation(EbNodB, N, M);
-        hFig = plot_ber(EbNodB, {ber_mpsk}, {sprintf('M-PSK (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MPSK)');
+        ber_mpsk2 = run_mpsk_simulation(EbNodB, N, 2);
+        ber_mpsk4 = run_mpsk_simulation(EbNodB, N, 4);
+        ber_mpsk8 = run_mpsk_simulation(EbNodB, N, 8);
+        ber_mpsk16 = run_mpsk_simulation(EbNodB, N, 16);
+        % hFig = plot_ber(EbNodB, {ber_mpsk}, {sprintf('M-PSK (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MPSK)');
+        % hFig0 = plot_ber_with_theory(EbNodB, {ber_mpsk2}, {'B-PSK'}, 'mpsk', 2, {'b-o'}, 1.5, 'BER vs Eb/No (B-PSK)');
+        % hFig1 = plot_ber_with_theory(EbNodB, {ber_mpsk4}, {'Q-PSK'}, 'mpsk', 4, {'b-o'}, 1.5, 'BER vs Eb/No (Q-PSK)');
+        % hFig2 = plot_ber_with_theory(EbNodB, {ber_mpsk8}, {'8-PSK'}, 'mpsk', 8, {'b-o'}, 1.5, 'BER vs Eb/No (8-PSK)');
+        % hFig3 = plot_ber_with_theory(EbNodB, {ber_mpsk16}, {'16-PSK'}, 'mpsk', 16, {'b-o'}, 1.5, 'BER vs Eb/No (16-PSK)');
+        hFig = plot_ber(EbNodB, {ber_mpsk2, ber_mpsk4, ber_mpsk8, ber_mpsk16}, ...
+                {sprintf('M-PSK (M = %d)', 2), sprintf('M-PSK (M = %d)', 4), ...
+                 sprintf('M-PSK (M = %d)', 8), sprintf('M-PSK (M = %d)', 16)}, ...
+                {'b-o', 'r-s', 'g-*', 'm-d', 'c-^', 'k-x'}, 1.5, 'BER Performance Comparison');
+
     case 'mask'
         ber_mask = run_mask_simulation(EbNodB,N,M);
         %hFig = plot_ber(EbNodB, {ber_mask}, {sprintf('M-ASK (M = %d)', M)}, {'r-s'}, 1.5, 'BER vs Eb/No (MASK)');
@@ -51,3 +63,23 @@ end
 if ~isempty(hFig)
     set(hFig, 'Visible', 'on');
 end
+
+% % show the BER Plot
+% if ~isempty(hFig0)
+%     set(hFig0, 'Visible', 'on');
+% end
+% 
+% % show the BER Plot
+% if ~isempty(hFig1)
+%     set(hFig1, 'Visible', 'on');
+% end
+% 
+% % show the BER Plot
+% if ~isempty(hFig2)
+%     set(hFig2, 'Visible', 'on');
+% end
+% 
+% % show the BER Plot
+% if ~isempty(hFig3)
+%     set(hFig3, 'Visible', 'on');
+% end

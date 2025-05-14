@@ -13,8 +13,12 @@ function ber = get_theoretical_ber(EbNoVec, modType, M)
             k = log2(M);                   % Bits per symbol
             factor = sqrt(3 * k ./ (M - 1) .* EbNo);
             ber = (4 / k) * (1 - 1/sqrt(M)) .* 0.5 .* erfc(factor / sqrt(2));
-   
-        otherwise
+       case {'mpsk'}
+            k = log2(M);
+            ber = (1/k) * erfc(sqrt(EbNo));
+       case {'bfsk'}
+            ber = 0.5 * erfc(sqrt(EbNo));
+       otherwise
             ber = 0;
             % error('Unsupported modulation type: %s', modType);
     end
